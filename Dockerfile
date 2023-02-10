@@ -2,6 +2,8 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
+ENV ASPNETCORE_URLS=http://+:8040
+ENV ASPNETCORE_ENVIRONMENT Development
 EXPOSE 80
 EXPOSE 443
 
@@ -17,6 +19,9 @@ RUN dotnet restore "UserRegistration.API/UserRegistration.API.csproj"
 COPY . .
 WORKDIR "/src/UserRegistration.API"
 RUN dotnet build "UserRegistration.API.csproj" -c Release -o /app/build
+
+RUN dotnet new nugetconfig  
+RUN dotnet nuget add source "https://gitlab.com/api/v4/projects/32362468/packages/nuget/index.json" -n CommonTools -u developer -p xBXjt88qjjDozm_GzwS1 --store-password-in-clear-text --configfile nuget.config  
 
 FROM build AS publish
 RUN dotnet publish "UserRegistration.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
