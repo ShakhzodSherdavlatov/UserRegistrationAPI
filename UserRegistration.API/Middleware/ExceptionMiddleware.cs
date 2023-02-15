@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-using ErrorsLibrary.Errors;
+﻿using ErrorsLibrary.Errors;
 using ErrorsLibrary.ErrorService;
 
 using MicroServicesCommonTools.Logger;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 using Minio.Exceptions;
 
 using Newtonsoft.Json;
-
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using UserRegistration.API.Common.Settings;
 using UserRegistration.API.Utils;
-
+using Error = ErrorsLibrary.Errors.Error;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace UserRegistration.API.Middleware
@@ -71,6 +68,10 @@ namespace UserRegistration.API.Middleware
             catch (DoesNotExistException avEx)
             {
                 _logger.Error($"Entity does not exists: {avEx}");
+                await HandleExceptionAsync(context, avEx).ConfigureAwait(false);
+            }
+            catch (Error avEx)
+            {
                 await HandleExceptionAsync(context, avEx).ConfigureAwait(false);
             }
             catch (GeneralException avEx)
@@ -167,10 +168,6 @@ namespace UserRegistration.API.Middleware
             {
                 await HandleExceptionAsync(context, avEx).ConfigureAwait(false);
             }
-            catch (ReflectionTypeLoadException avEx)
-            {
-                await HandleExceptionAsync(context, avEx).ConfigureAwait(false);
-            }
             catch (NotImplementedException avEx)
             {
                 await HandleExceptionAsync(context, avEx).ConfigureAwait(false);
@@ -187,18 +184,11 @@ namespace UserRegistration.API.Middleware
             {
                 await HandleExceptionAsync(context, ex).ConfigureAwait(false);
             }
-
             finally
             {
                 if (!context.Request.Path.Value.Contains("swagger.json") &&
-                     !context.Request.Path.Value.Contains("index.html"))
-                    _logger.Information(
-                        $"{Environment.NewLine}|{"TIN",-8}| {context.User.GetUserParameters().Tin}" +
-                        $"{Environment.NewLine}|{"IP",-8}| remote:{context.Connection.RemoteIpAddress}:{context.Connection.RemotePort,-6}local:{context.Connection.LocalIpAddress}:{context.Connection.RemotePort,-5}" +
-                        $"{Environment.NewLine}|{"ID",-8}| {context.Connection.Id,-10} TraceIdentifier : {context.TraceIdentifier}" +
-                        $"{Environment.NewLine}|{"Request",-8}| {context.Request?.Method,-3} {context.Request?.Path.Value}" +
-                        $"{Environment.NewLine}|{"Response",-8}| Status : {context.Response?.StatusCode} " +
-                        $"{Environment.NewLine}|{"Querry",-8}| {context.Request.QueryString}");
+                    !context.Request.Path.Value.Contains("index.html"))
+                    _logger.Information($"{LogHandlerBuilder(context)}");
             }
         }
 
@@ -244,7 +234,7 @@ namespace UserRegistration.API.Middleware
             return log;
         }
 
-        private StringBuilder ExceptionHandlerBuilder(HttpContext context, Exception exception, AppSettings? settings = default, StringBuilder? log = default)
+        private StringBuilder ExceptionHandlerBuilder(HttpContext context, Exception exception, AppSettings? settings = default, StringBuilder log = default)
         {
             if (log is null)
             {

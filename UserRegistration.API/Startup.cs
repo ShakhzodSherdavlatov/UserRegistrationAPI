@@ -189,8 +189,8 @@ namespace UserRegistration.API
                 }
                 else
                 {
-                    app.ConfigureCustomMiddleware(_appSettings);
-                    _logger.LogInformation("Setting not development exception handling settings.");
+                    //app.ConfigureCustomMiddleware(_appSettings);
+                    //_logger.LogInformation("Setting not development exception handling settings.");
                     //Both alternatives are usable for general error handling:
                     // - middleware
                     // - UseExceptionHandler()
