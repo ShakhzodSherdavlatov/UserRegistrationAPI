@@ -8,8 +8,8 @@ using DbTools.DataBase.Interfaces;
 
 using Microsoft.Extensions.Options;
 
-using UserRegistration.API.Common.Settings;
-using UserRegistration.Services.Model;
+using UserRegistrationAPI.API.DataContracts;
+using UserRegistrationAPI.API.DataContracts.Settings;
 
 namespace UserRegistration.Services
 {
@@ -18,7 +18,7 @@ namespace UserRegistration.Services
         private AppSettings _settings;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _uow;
-        private Repository<User> _usersinfo;
+        private Repository<User> _repository;
 
         public UserService(IOptions<AppSettings> settings, IMapper mapper, IUnitOfWork uow)
         {
@@ -26,42 +26,40 @@ namespace UserRegistration.Services
             _mapper = mapper;
             _uow = uow;
 
-            _usersinfo = _uow.Factory<User>();
+            _repository = _uow.Factory<User>();
         }
 
         public async Task<User> CreateAsync(User user)
         {
-            var res = await _usersinfo.AddAsync(user);
-            await _uow.SaveAsync();
+            var res = await _repository.AddAsync(user);
+            await _uow.SaveAsync().ConfigureAwait(false);
             return res;
         }
 
         public async Task<User> UpdateAsync(User user)
         {
-            var res = await _usersinfo.UpdateAsync(user);
-            await _uow.SaveAsync();
+            var res = await _repository.UpdateAsync(user);
+            await _uow.SaveAsync().ConfigureAwait(false);
             return res;
         }
 
         public async Task<User> DeleteAsync(int id)
         {
-            return await _usersinfo.DeleteAsync(id);
-
+            return await _repository.DeleteAsync(id);
         }
 
         public async Task<User> GetAsync(int id)
         {
-            return await _usersinfo.GetAsync(id);
+            return await _repository.GetAsync(id);
         }
 
         public async Task<List<User>> GetAllUsers(string searchText = "")
         {
-            return (List<User>)await _usersinfo
-                .FindAsync(u => string.IsNullOrWhiteSpace(searchText) 
-                                || (u.sn.Contains(searchText) 
-                                    || u.givenName.Contains(searchText) 
+            return (List<User>)await _repository
+                .FindAsync(u => string.IsNullOrWhiteSpace(searchText)
+                                || (u.sn.Contains(searchText)
+                                    || u.givenName.Contains(searchText)
                                     || u.telephoneNumber.Contains(searchText)));
-
         }
     }
 }

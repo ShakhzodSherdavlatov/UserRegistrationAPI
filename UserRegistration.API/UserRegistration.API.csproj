@@ -21,9 +21,16 @@
     <PackageReference Include="ErrorsLibrary" Version="1.0.37" />
     <PackageReference Include="MicroservicesCommonTools" Version="1.2.36.9" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.ApiExplorer" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.16">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.16">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Identity.Web" Version="1.26.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
@@ -40,7 +47,6 @@
   <ItemGroup>
     <ProjectReference Include="..\UserRegistration.API.Common\UserRegistration.API.Common.csproj" />
     <ProjectReference Include="..\UserRegistration.IoC.Configuration\UserRegistration.IoC.Configuration.csproj" />
-    <ProjectReference Include="..\UserRegistration.Services.Model\UserRegistration.Services.Model.csproj" />
     <ProjectReference Include="..\UserRegistration.Services\UserRegistration.Services.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace UserRegistration.API.Common.Settings
+﻿namespace UserRegistrationAPI.API.DataContracts.Settings
 {
     public class AppSettings
     {

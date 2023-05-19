@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using UserRegistration.API.Common.Settings;
+
+using UserRegistrationAPI.API.DataContracts.Settings;
 
 namespace UserRegistration.API.Middleware
 {

@@ -10,8 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UserRegistration.API.Common\UserRegistration.API.Common.csproj" />
-    <ProjectReference Include="..\UserRegistration.DAL\UserRegistration.DAL.csproj" />
     <ProjectReference Include="..\UserRegistration.Services.Model\UserRegistration.Services.Model.csproj" />
   </ItemGroup>
 

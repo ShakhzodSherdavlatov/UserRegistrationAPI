@@ -1,17 +1,16 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using UserRegistration.Services;
-using UserRegistration.Services.Model;
+using UserRegistrationAPI.API.DataContracts;
 
 namespace UserRegistration.API.Controllers.V1
 {
     [ApiVersion("1.0")]
-    [Route("api/users")]//required for default versioning
     [Route("api/v{version:apiVersion}/users")]
     [ApiController]
     public class UserController : Controller
@@ -28,6 +27,7 @@ namespace UserRegistration.API.Controllers.V1
         }
 
         #region GET
+
         /// <summary>
         /// Returns a user entity according to the provided Id.
         /// </summary>
@@ -49,11 +49,12 @@ namespace UserRegistration.API.Controllers.V1
 
             var data = await _service.GetAsync(id).ConfigureAwait(false);
 
-            if (data != null)
+            if ( data != null )
                 return _mapper.Map<User>(data);
             else
                 return null;
         }
+
         [HttpGet]
         public async Task<List<User>> Get(string searchText)
         {
@@ -61,14 +62,16 @@ namespace UserRegistration.API.Controllers.V1
 
             var data = await _service.GetAllUsers(searchText);
 
-            if (data != null)
+            if ( data != null )
                 return data;
             else
                 return null;
         }
+
         #endregion
 
         #region POST
+
         /// <summary>
         /// Creates a user.
         /// </summary>
@@ -84,21 +87,22 @@ namespace UserRegistration.API.Controllers.V1
         {
             _logger.LogDebug($"UserControllers::Post::");
 
-            if (value == null)
+            if ( value == null )
                 throw new ArgumentNullException("value");
 
 
             var data = await _service.CreateAsync(value);
 
-            if (data != null)
+            if ( data != null )
                 return _mapper.Map<User>(data);
             else
                 return null;
-
         }
+
         #endregion
 
         #region PUT
+
         /// <summary>
         /// Updates an user entity.
         /// </summary>
@@ -114,14 +118,16 @@ namespace UserRegistration.API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         public async Task<User> UpdateUser(User parameter)
         {
-            if (parameter == null)
+            if ( parameter == null )
                 throw new ArgumentNullException("parameter");
 
             return await _service.UpdateAsync(parameter);
         }
+
         #endregion
 
         #region DELETE
+
         /// <summary>
         /// Deletes an user entity.
         /// </summary>
@@ -139,9 +145,11 @@ namespace UserRegistration.API.Controllers.V1
         {
             return await _service.DeleteAsync(id);
         }
+
         #endregion
 
         #region Exceptions
+
         [HttpGet("exception/{message}")]
         [ProducesErrorResponseType(typeof(Exception))]
         public async Task RaiseException(string message)
@@ -150,6 +158,7 @@ namespace UserRegistration.API.Controllers.V1
 
             throw new Exception(message);
         }
+
         #endregion
     }
 }

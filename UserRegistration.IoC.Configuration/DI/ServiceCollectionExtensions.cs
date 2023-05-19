@@ -9,7 +9,8 @@ namespace UserRegistration.IoC.Configuration.DI
 {
     public static class ServiceCollectionExtensions
     {
-        public static void ConfigureBusinessServices(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureBusinessServices(this IServiceCollection services, 
+            IConfiguration configuration)
         {
             if (services != null)
             {

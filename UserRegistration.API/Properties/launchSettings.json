@@ -1,23 +1,28 @@
 {
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:61537",
+      "sslPort": 44353
+    }
+  },
   "profiles": {
-    "Run WEB API": {
-      "commandName": "Project",
+    "Run Dev Mod": {
+      "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "user-registration-service/swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:52772;http://localhost:52773"
+      }
     },
-    "Docker": {
-      "commandName": "Docker",
+    "Run Prod Mod": {
+      "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/userregistration-service/swagger",
+      "launchUrl": "user-registration-service/swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "publishAllPorts": true,
-      "useSSL": "true"
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      }
     },
     "WSL": {
       "commandName": "WSL2",

@@ -1,6 +1,8 @@
-﻿namespace UserRegistrationAPI.API.DataContracts
+﻿using DbTools.Entities.Abstract;
+
+namespace UserRegistrationAPI.API.DataContracts
 {
-    public class Address
+    public class Address : Entity
     {
         public string City { get; set; }
         public string Street { get; set; }

@@ -1,33 +1,27 @@
 ﻿using System;
-
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-
 using Swashbuckle.AspNetCore.SwaggerGen;
+using UserRegistrationAPI.API.DataContracts.Settings;
 
-using UserRegistration.API.Common.Settings;
-
-//Source versionning .NET Core 3.0
-//https://github.com/microsoft/aspnet-api-versioning/wiki/API-Documentation
-namespace UserRegistration.API.Swagger
+namespace UserRegistration.API.Common.Configuration
 {
-    public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
+    /// <summary>
+    /// https://github.com/dotnet/aspnet-api-versioning/wiki/API-Documentation#aspnet-core
+    /// </summary>
+    public class ConfigurationSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
     {
         readonly IApiVersionDescriptionProvider provider;
-        readonly IConfiguration configuration;
         readonly AppSettings appSettings;
 
-        public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider, IConfiguration configuration)
+        public ConfigurationSwaggerOptions(IApiVersionDescriptionProvider provider, IConfiguration configuration)
         {
             this.provider = provider;
-            this.configuration = configuration;
-
             appSettings = configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
         }
-
 
         public void Configure(SwaggerGenOptions options)
         {
@@ -36,10 +30,10 @@ namespace UserRegistration.API.Swagger
 
         public void Configure(SwaggerGenOptions options, ApiSettings apiSettings)
         {
-            if (options == null)
+            if ( options == null )
                 throw new ArgumentNullException(nameof(options));
 
-            if (apiSettings == null)
+            if ( apiSettings == null )
                 throw new ArgumentNullException(nameof(apiSettings));
 
             foreach (var description in provider.ApiVersionDescriptions)
@@ -55,12 +49,22 @@ namespace UserRegistration.API.Swagger
                 Title = $"{apiSettings.Title} {description.ApiVersion}",
                 Version = description.ApiVersion.ToString(),
                 Description = apiSettings?.Description,
-                Contact = apiSettings != null && apiSettings.Contact != null ? new OpenApiContact { Name = apiSettings.Contact.Name, Email = apiSettings.Contact.Email, Url = new Uri(apiSettings.Contact.Url) } : null,
-                License = apiSettings != null && apiSettings.License != null ? new OpenApiLicense { Name = apiSettings.License.Name, Url = new Uri(apiSettings.License.Url) } : null,
-                TermsOfService = !string.IsNullOrEmpty(apiSettings?.TermsOfServiceUrl) ? new Uri(apiSettings.TermsOfServiceUrl) : null
+                Contact = apiSettings != null && apiSettings.Contact != null
+                    ? new OpenApiContact
+                    {
+                        Name = apiSettings.Contact.Name, Email = apiSettings.Contact.Email,
+                        Url = new Uri(apiSettings.Contact.Url)
+                    }
+                    : null,
+                License = apiSettings != null && apiSettings.License != null
+                    ? new OpenApiLicense { Name = apiSettings.License.Name, Url = new Uri(apiSettings.License.Url) }
+                    : null,
+                TermsOfService = !string.IsNullOrEmpty(apiSettings?.TermsOfServiceUrl)
+                    ? new Uri(apiSettings.TermsOfServiceUrl)
+                    : null
             };
 
-            if (description.IsDeprecated)
+            if ( description.IsDeprecated )
             {
                 info.Description += " This API version has been deprecated.";
             }
